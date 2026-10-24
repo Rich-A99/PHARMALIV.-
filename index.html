@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PHARMALIV</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#16A34A"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g:#16A34A;--gd:#166534;--ink:#1F2937;--bg:#FFFFFF;--bg2:#F8FAFC;--line:#E2E8F0;--mut:#64748B;--warn:#B45309;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#E5E7EB;--bg:#111827;--bg2:#1F2937;--line:#374151;--mut:#9CA3AF}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:Montserrat,system-ui,sans-serif;background:var(--bg2);color:var(--ink);font-size:15px;line-height:1.5}
+header{background:var(--bg);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.logo{font-size:22px;color:var(--ink);display:flex;align-items:center;gap:8px}.mark{height:40px;width:auto;border-radius:8px;background:#fff}.logo b{font-weight:800}.logo span{font-weight:300;color:var(--g)}
+nav{display:flex;gap:6px;overflow-x:auto;max-width:100%}
+nav button{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px 14px;border-radius:999px;font:500 14px Montserrat,sans-serif;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--gd);border-color:var(--gd);color:#fff}
+main{max-width:1000px;margin:0 auto;padding:16px}
+.banner{background:var(--gd);color:#fff;border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px}footer{background:#1F2937;color:#fff;margin-top:24px;padding:20px 16px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-size:13px;text-align:center}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{margin:0 0 10px;font-size:18px}h3{margin:0 0 8px;font-size:15px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.grow{flex:1 1 200px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+button.pri,button.sec{font:700 14px Montserrat,sans-serif;border-radius:8px;padding:10px 16px;cursor:pointer;border:0}
+button.pri{background:var(--g);color:#fff}button.sec{background:var(--bg2);color:var(--ink);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--g);outline-offset:2px}
+button:disabled{opacity:.5;cursor:not-allowed}
+input,select,textarea{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+label{display:block;font-size:13px;color:var(--mut);margin:8px 0 3px}
+.prod{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg)}
+.prod .ph{font-size:34px}.prod.out{opacity:.55}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--g);color:#fff}
+.badge.r{background:var(--warn)}.badge.m{background:var(--mut)}
+.code{font-size:56px;font-weight:800;color:var(--gd);letter-spacing:1px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .code{color:#4ADE80}}
+.steps{display:flex;gap:4px;margin:10px 0}
+.steps div{flex:1;text-align:center;font-size:12px;padding:8px 2px;border-radius:8px;background:var(--bg2);border:1px solid var(--line);color:var(--mut)}
+.steps div.d{background:var(--g);border-color:var(--g);color:#fff;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+.scroll{overflow-x:auto}
+.stat{font-size:26px;font-weight:800;color:var(--g)}
+.note{font-size:13px;color:var(--mut)}
+.toast{background:var(--bg);border-left:4px solid var(--g);border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:13px}
+svg.map{width:100%;height:auto;border-radius:10px;background:var(--bg2);border:1px solid var(--line)}
+.ocr{background:var(--bg2);border:1px dashed var(--g);border-radius:8px;padding:10px;font-size:13px;margin-top:8px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+@keyframes sweep{from{top:0}to{top:calc(100% - 4px)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #16A34A66}50%{box-shadow:0 0 0 10px #16A34A00}}
+@keyframes rot{to{transform:rotate(360deg)}}
+main>*{animation:rise .35s ease both}
+header{background:linear-gradient(90deg,var(--bg),#16A34A18)}
+.banner{background:linear-gradient(120deg,var(--gd),var(--g))}
+.card{transition:box-shadow .2s}.card:hover{box-shadow:0 6px 18px #16A34A22}
+.prod{position:relative;transition:transform .2s}.prod:hover{transform:translateY(-4px)}
+.art{width:100%;height:92px;border-radius:8px}td .art{width:44px;height:40px;vertical-align:middle}
+.badge.b{background:#2563EB}.badge.x{background:#DC2626}
+.flash{animation:pulse 1.2s infinite;border-color:var(--g)}
+.drop{position:relative;border:2px dashed var(--g);border-radius:10px;padding:14px;text-align:center;font-size:13px;color:var(--mut);transition:background .2s}
+.drop:hover{background:#16A34A12}.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;padding:0}
+.scan{position:relative;overflow:hidden;border-radius:10px;max-width:220px;margin:6px 0}.scan img{width:100%;display:block}
+.scan i{position:absolute;left:0;right:0;height:4px;background:#16A34A;box-shadow:0 0 14px 4px #16A34A;animation:sweep .8s ease-in-out infinite alternate}
+.ov{position:fixed;inset:0;background:#000A;display:grid;place-items:center;z-index:20;padding:16px;animation:pop .2s both;overflow:auto}
+.modal{background:var(--bg);border-radius:16px;padding:22px;max-width:380px;width:100%;text-align:center;animation:pop .3s both}
+.spin{width:54px;height:54px;border:5px solid var(--line);border-top-color:var(--g);border-radius:50%;margin:14px auto;animation:rot 1s linear infinite}
+.ok{font-size:54px;animation:pop .4s both}.steps div{transition:background .4s}
+.mapslot{border-radius:10px;overflow:hidden;position:relative}
+</style></head><body>
+<header><div class="logo"><img class="mark" src="data:image/jpeg;base64,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" alt="" width="31" height="40"><b>PHARMA</b><span>LIV</span></div>
+<nav id="nav"></nav><span id="acct"></span><span id="srv" class="badge m">Mode démo</span><button class="sec" onclick="reset()">Réinitialiser les données</button></header>
+<main id="app"></main>
+<footer id="foot"></footer>
+<script>
+const Z=[["Libreville (Centre, Nzeng-Ayong, PK9, Petit Paris)",2000],["Owendo",2500],["Akanda (Angondjé, Sablière, Delta)",3000],["Essassa",3500],["Ntoum",4000]];
+const ROLES=[["client","Client"],["pharma","Pharmacie"],["livreur","Livreur"],["admin","Admin"]];
+const seed=()=>({day:today(),n:0,orders:[],tx:[],notifs:[],wallet:0,wd:[],users:[{id:"u-ph",role:"pharma",name:"Pharmacie du Centre",phone:"077000001",pin:"1234",momo:"077000001",momoOp:"Airtel Money",wallet:0},{id:"u-lv",role:"livreur",name:"Brice O.",phone:"077000002",pin:"1234",momo:"077000002",momoOp:"Airtel Money",wallet:0},{id:"u-ad",role:"admin",name:"PHARMALIV HQ",phone:"077000003",pin:"1234",momo:"077000003",momoOp:"Airtel Money",wallet:0}],me:{pharma:"u-ph",livreur:"u-lv",admin:"u-ad"},init:1,brand:{logo:"",c1:"#16A34A",c2:"#166534",c3:"#1F2937",title:"Vos médicaments à domicile dans le Grand Libreville.",sub:"Commande sans compte, paiement Airtel Money ou Moov Money.",promo:""},
+products:[[1,"Paracétamol 500 mg",'Médicaments',1200,300,"💊",1],[2,"Amoxicilline 1 g",'Médicaments',3500,700,"💊",1],[3,"Sirop contre la toux",'Médicaments',2800,560,"🧪",1],[4,"Sérum physiologique",'Parapharmacie',1500,0,"💧",1],[5,"Crème hydratante",'Parapharmacie',6500,0,"🧴",1],[6,"Vitamine C 1000",'Parapharmacie',4200,0,"🍊",0],[7,"Thermomètre digital",'Parapharmacie',3800,0,"🌡️",1],[8,"Masques chirurgicaux x50",'Parapharmacie',2500,0,"😷",1]].map(a=>({id:a[0],name:a[1],cat:a[2],price:a[3],tm:a[4],pic:a[5],stock:!!a[6]}))});
+function today(){return new Date().toISOString().slice(0,10)}
+let S;try{S=JSON.parse(localStorage.getItem("pl2")||"null")}catch(e){S=null}S=S||seed();S.users=S.users||seed().users;S.me=S.me||{};S.brand=S.brand||seed().brand;if(!S.users.some(u=>u.role==="admin"))S.users.push(seed().users[2]);S.users.forEach(u=>{if(u.role!=="client"&&!u.momo){u.momo=u.phone;u.momoOp="Airtel Money"}});if(!S.init){S.init=1;["pharma","livreur","admin"].forEach(r=>{const u=S.users.find(x=>x.role===r);if(u)S.me[r]=u.id})}
+function save(){try{localStorage.setItem("pl2",JSON.stringify(S))}catch(e){}DIRTY=true;if(SRV)push()}
+function reset(){if(confirm("Effacer toutes les données de test ?")){S=seed();cart={};ocr=null;save();go("client")}}
+let role="client",cart={},ocr=null,insured=false,lastSeen=0,tab="orders",cur=null,SRV=null,ADM="",editId=null,pend=null,ME=null,AUTH="login",CA=false,PM="auto",RS=null,AT="dash",DIRTY=false,GW=null;
+const $=s=>document.querySelector(s),f=n=>n.toLocaleString("fr-FR")+" FCFA",esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function notif(to,msg){S.notifs.unshift({to,msg,t:new Date().toLocaleTimeString("fr-FR")});S.notifs=S.notifs.slice(0,30)}
+function nextCode(){if(S.day!==today()){S.day=today();S.n=0}S.n++;return"#P"+String(S.n).padStart(3,"0")}
+function go(r){role=r;CA=false;render()}
+const LOGO=document.querySelector(".mark").src,mk=h=>`<img class="mark" src="${S.brand.logo||LOGO}" alt="" style="height:${h}px">`;
+function toasts(r){return S.notifs.filter(n=>n.to===r).slice(0,3).map(n=>`<div class="toast">${esc(n.t)} · ${esc(n.msg)}</div>`).join("")}
+function beep(){try{const c=new AudioContext(),o=c.createOscillator();o.frequency.value=880;o.connect(c.destination);o.start();setTimeout(()=>{o.stop();c.close()},350)}catch(e){}}
+function render(){
+ $("#nav").innerHTML=ROLES.map(r=>`<button class="${r[0]===role?"on":""}" onclick="go('${r[0]}')">${r[1]}</button>`).join("");
+ ME=S.me&&S.me[role]?S.users.find(u=>u.id===S.me[role])||null:null;
+ const B=S.brand,rs=document.documentElement.style;rs.setProperty("--g",B.c1);rs.setProperty("--gd",B.c2);if(!(typeof matchMedia==="function"&&matchMedia("(prefers-color-scheme: dark)").matches))rs.setProperty("--ink",B.c3);document.querySelector("header .mark").src=B.logo||LOGO;
+ if(MH)document.body.appendChild(MH);
+ $("#app").innerHTML=RS?resetView():role==="client"?(CA&&!ME?authView("client"):vClient()):ME?(role==="admin"?vAdmin():role==="pharma"?vPharma():vLivreur()):authView(role);
+ attachMap();
+ if(role==="client"&&cur&&!SRV&&!RS){const o=S.orders.find(x=>x.id===cur);if(o&&o.status==="push"&&!o.shown){o.shown=true;setTimeout(()=>payUssd(o.id),400)}}
+ $("#acct").innerHTML=ME?`<button class="sec" onclick="logout()">👤 ${esc(ME.name.split(" ")[0])} • Quitter</button>`:role==="client"?`<button class="pri" onclick="CA=true;AUTH='reg';render()">Mon compte</button>`:"";
+ const sb=$("#srv");sb.className="badge "+(SRV?(SRV.mode==="live"?"":"r"):"m");sb.textContent=SRV?"Serveur connecté ("+(SRV.mode==="live"?"paiements réels":"simulation")+")":"Mode démo";
+ $("#foot").innerHTML=mk(36)+'<div><b>PHARMA</b><span style="font-weight:300">LIV</span><br>Livraison de médicaments à domicile dans le Grand Libreville</div>';
+ if(role==="client"&&cur)bindClient();
+}
+/* ---------- CLIENT ---------- */
+function cartTotal(){return Object.entries(cart).reduce((s,[id,q])=>{const p=S.products.find(x=>x.id==id);return s+(insured?p.tm:p.price)*q},0)}
+function vClient(){
+ const mine=cur&&S.orders.find(o=>o.id===cur);
+ if(mine)return vTrack(mine);
+ const zi=+($("#zone")?.value||(ME&&ME.zone)||0),fee=Z[zi][1],prods=cartTotal(),ins=insured?200:0;
+ return `<div class="banner">${mk(64)}<div><b>${esc(S.brand.title)}</b><br>${esc(S.brand.sub)}</div></div>${S.brand.promo?`<div class="card" style="border-color:var(--g);background:#16A34A14"><b>${esc(S.brand.promo)}</b></div>`:""}${ME?quick():""}
+ <div class="card"><h2>1. Type de commande</h2><div class="row"><button class="${insured?"sec":"pri"}" onclick="insured=false;render()">Sans assurance</button><button class="${insured?"pri":"sec"}" onclick="insured=true;render()">Avec assurance</button></div>
+ ${insured?`<div class="note" style="margin-top:8px">Vous payez le ticket modérateur. 200 FCFA de frais de dossier sont ajoutés.</div>
+ <div class="row"><div class="grow"><label>Photo de l’ordonnance</label><div class="drop">Glisser une photo ici ou toucher pour l’ajouter<input type="file" accept="image/*" onchange="runOcr(this,'ord')"></div></div><div class="grow"><label>Carte d’assuré (CNAMGS, ASCOMA, SAHAM, OGAR)</label><div class="drop">Glisser une photo ici ou toucher pour l’ajouter<input type="file" accept="image/*" onchange="runOcr(this,'card')"></div></div><div class="grow"><label>CNI ou passeport</label><div class="drop">Glisser une photo ici ou toucher pour l’ajouter<input type="file" accept="image/*" onchange="runOcr(this,'id')"></div></div></div>
+ <div id="ocrbox">${ocr?ocrHtml():'<div class="note">Ajoutez les 3 documents : les champs seront remplis automatiquement.</div>'}</div>`:""}</div>
+ <div class="card"><h2>2. Produits</h2><div class="grid">${S.products.map(p=>`<div class="prod ${p.stock?"":"out"}"><span class="badge ${p.stock?"":"x"}" style="position:absolute;top:8px;right:8px">${p.stock?"Dispo":"Rupture"}</span><div class="ph">${pc(p)}</div><b>${esc(p.name)}</b><div class="note">${esc(p.cat)}</div><div>${f(insured&&p.tm?p.tm:p.price)}</div>${p.stock?`<div class="row" style="margin-top:6px"><button class="sec" onclick="qty(${p.id},-1)" aria-label="Retirer">−</button><b>${cart[p.id]||0}</b><button class="sec" onclick="qty(${p.id},1)" aria-label="Ajouter">+</button></div>`:'<span class="badge r">Rupture de stock</span>'}</div>`).join("")}</div></div>
+ <div class="card"><h2>3. Livraison</h2><div class="row"><div class="grow"><label>Nom complet</label><input id="nm" value="${esc(ocr?.name||$("#nm")?.value||(ME&&ME.name)||"")}"></div><div class="grow"><label>Téléphone</label><input id="ph" inputmode="tel" placeholder="074 00 00 00" value="${esc($("#ph")?.value||(ME&&ME.phone)||"")}"></div></div>
+ <label>Zone de livraison</label><select id="zone" onchange="render()">${Z.map((z,i)=>`<option value="${i}" ${i===zi?"selected":""}>Zone ${i+1} · ${z[0]} · ${f(z[1])}</option>`).join("")}</select>
+ <label>Adresse précise</label><input id="adr" placeholder="Quartier, repère" value="${esc($("#adr")?.value||(ME&&ME.adr)||"")}">
+ <label>Mode de paiement</label><div class="row"><button class="${PM==="auto"?"pri":"sec"}" onclick="PM='auto';render()">Automatique (CinetPay)</button><button class="${PM==="p2p"?"pri":"sec"}" onclick="PM='p2p';render()">Transfert direct (SMS)</button></div><label>Opérateur</label><select id="op">${["Airtel Money","Moov Money"].map(o=>`<option ${o===($("#op")?.value||(ME&&ME.op)||"Airtel Money")?"selected":""}>${o}</option>`).join("")}</select>
+ <hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><div class="row"><span class="grow">Caisse pharmacie (${insured?"ticket modérateur":"produits"}) : ${f(prods)}<br>Caisse livraison et service : ${f(fee+ins)}${insured?` (dont ${f(ins)} de frais de dossier)`:""}</span><span class="stat">${f(prods+fee+ins)}</span></div>
+ <button class="pri" style="width:100%;margin-top:10px" ${prods?"":"disabled"} onclick="pay()">${PM==="p2p"?"Commander et recevoir les instructions":"Commander et payer"}</button></div>${ME?history():""}`;
+}
+function qty(id,d){cart[id]=Math.max(0,(cart[id]||0)+d);render()}
+function settle(o){const a=S.users.find(u=>u.role==="admin"),p=S.users.find(u=>u.role==="pharma");if(a)a.wallet=(a.wallet||0)+o.split.pl;if(p)p.wallet=(p.wallet||0)+o.split.pharm}
+function markPaid(o,ref){o.status="paid";S.tx.unshift({t:new Date().toLocaleString("fr-FR"),id:o.id,op:o.op,total:o.total,...o.split,ref:ref||"TX"+Date.now().toString().slice(-7)});settle(o);notif("pharma",o.id+" : paiement reçu, à préparer");notif("client","Paiement confirmé \u2022 "+o.id);save();render()}
+async function pushPay(id){const o=S.orders.find(x=>x.id===id);
+ o.status="push";notif("client",id+" \u2022 demande de paiement reçue sur votre téléphone");save();render();
+ if(!SRV)return;
+ try{let r=await fetch(API+"/api/paiements",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({operateur:/moov/i.test(o.op)?"moov":"airtel",telephone:o.phone,produits:o.prods,fraisZone:o.fee,assurance:!!o.insured,code:o.id})});
+  let p=await r.json();if(!r.ok)throw new Error(p.erreur||"refusé");
+  if(p.urlPaiement){o.payUrl=p.urlPaiement;save();render()}
+  for(let i=0;i<100&&p.statut==="EN_ATTENTE";i++){await new Promise(s=>setTimeout(s,3000));p=await(await fetch(API+"/api/paiements/"+p.id)).json()}
+  if(p.statut==="REUSSI")return markPaid(o,p.refOperateur);
+  throw new Error(p.erreur||"paiement non confirmé")
+ }catch(e){o.status="new";save();alert("Push non abouti : "+e.message);render()}}
+function payUssd(id){const o=S.orders.find(x=>x.id===id);if(o&&o.status==="push")ussd(o.op,o.phone,o.total,()=>markPaid(o),()=>{o.status="new";o.shown=false;notif("pharma",id+" : paiement refusé par le client");save();render()})}
+function pushCard(o){return `<div class="card" style="border-color:var(--g)"><span class="badge r">Paiement à valider</span><p>Demande de ${f(o.total)} envoyée au ${esc(o.phone)} (${esc(o.op)}).</p>${o.payUrl?`<a class="pri" style="display:inline-block;text-decoration:none;padding:10px 16px;border-radius:8px;color:#fff" href="${esc(o.payUrl)}" target="_blank" rel="noopener">Ouvrir la page de paiement</a>`:SRV?'<p class="note">Validez sur votre téléphone.</p>':`<button class="pri" onclick="payUssd('${o.id}')">Ouvrir la demande USSD</button>`}</div>`}
+function ussd(op,ph,amt,ok,no){const m=/moov/i.test(op),d=document.createElement("div");d.className="ov";d.id="ussd";
+ d.innerHTML=`<div class="modal"><span class="badge" style="background:${m?"#0057B8":"#E4002B"}">${esc(op)}</span><div class="spin"></div><h3>Demande de paiement reçue</h3><p>PHARMALIV demande <b>${f(amt)}</b>. Entrez votre code PIN ${esc(op)} pour valider (numéro ${esc(ph)}).</p><input id="upin" type="password" inputmode="numeric" maxlength="4" placeholder="PIN à 4 chiffres" style="text-align:center;font-size:20px"><div class="row" style="justify-content:center;margin-top:10px"><button class="pri" id="uok">Valider le paiement</button><button class="sec" id="uno">Refuser</button></div><pre class="note" id="ulog" style="text-align:left;white-space:pre-wrap"></pre></div>`;
+ document.body.appendChild(d);d.querySelector("#uno").onclick=()=>{d.remove();no&&no()};
+ d.querySelector("#uok").onclick=()=>{if(!/^\d{4}$/.test(d.querySelector("#upin").value))return alert("Le PIN doit avoir 4 chiffres.");d.querySelector("#ulog").textContent="Webhook "+(m?"Moov":"Airtel")+" : paiement confirmé";d.querySelector(".spin").outerHTML='<div class="ok">✅</div>';setTimeout(()=>{d.remove();ok()},1100)}}
+function walletCard(){return `<div class="card"><h2>Mon solde</h2><div class="row"><span class="stat">${f(ME.wallet||0)}</span><button class="pri" ${ME.wallet?"":"disabled"} onclick="payout()">Retirer vers mon Mobile Money (${esc(ME.momoOp||"")} ${esc(ME.momo||"")})</button></div></div>`}
+async function payout(){const u=ME,amt=u.wallet||0;if(!amt)return alert("Aucun solde à retirer.");if(!u.momo)return alert("Ajoutez votre numéro Mobile Money.");
+ if(SRV){if(!ADM)ADM=prompt("Clé admin du serveur (ADMIN_KEY) :")||"";if(!ADM)return;
+  try{const r=await fetch(API+"/api/retraits",{method:"POST",headers:{"Content-Type":"application/json","x-cle-admin":ADM},body:JSON.stringify({operateur:/moov/i.test(u.momoOp)?"moov":"airtel",telephone:u.momo,montant:amt,motif:"retrait "+u.role})});const j=await r.json();if(r.status===401)ADM="";if(!r.ok)throw new Error(j.erreur||"Refusé")}catch(e){return alert("Retrait non envoyé : "+e.message)}}
+ S.wd.unshift({who:u.name,id:Date.now(),t:new Date().toLocaleString("fr-FR"),op:u.momoOp,tel:u.momo,amt,st:"envoye",ref:SRV?"SERVEUR":"SIMULATION"});u.wallet=0;notif(u.role,"Retrait de "+f(amt)+" envoyé vers "+u.momoOp+" "+u.momo);save();render()}
+function wm(u,code){return new Promise(res=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=im.width;c.height=im.height;const x=c.getContext("2d");x.drawImage(im,0,0);x.fillStyle="rgba(22,101,52,.35)";x.font="bold "+Math.max(14,im.width/14)+"px sans-serif";x.rotate(-.35);const t=code+" "+new Date().toLocaleString("fr-FR")+" PHARMALIV";for(let y=0;y<im.height*1.6;y+=Math.max(40,im.width/6))x.fillText(t,-im.width*.2,y);res(c.toDataURL("image/jpeg",.7))};im.onerror=()=>res(u);im.src=u})}
+function wmOrder(o){if(o.ocr&&o.ocr.imgs)Object.keys(o.ocr.imgs).forEach(k=>wm(o.ocr.imgs[k],o.id).then(n=>{o.ocr.imgs[k]=n;o.ocr.wm=1;save()}))}
+function saveNum(id){const o=S.orders.find(x=>x.id===id);o.ocr.num=$("#ni"+id.slice(1)).value.trim();o.ocr.numOk=true;save();render()}
+function resetView(){const r=RS,t={client:"Client",pharma:"Pharmacie",livreur:"Livreur",admin:"Administrateur"}[r.role];
+ const base=`<div class="card" style="max-width:420px;margin:0 auto"><div style="text-align:center">${mk(56)}<h2>Code oublié : ${t}</h2></div><label for="rp">Téléphone du compte</label><input id="rp" inputmode="tel" placeholder="074 00 00 00" value="${esc(r.phone||"")}"><button class="pri" style="width:100%;margin-top:10px" onclick="rs1()">Envoyer le code par SMS</button><button class="sec" style="width:100%;margin-top:8px" onclick="RS=null;render()">Retour à la connexion</button></div>`;
+ if(r.step===1)return base;
+ const sms=`<div class="note" style="text-align:left;background:var(--bg2);border-radius:8px;padding:8px;margin:8px 0">SMS simulé : « Votre code de réinitialisation PHARMALIV est : <b>${r.code}</b> »</div>`;
+ return base+`<div class="ov"><div class="modal">${r.step===2?`<h3>Entrez le code reçu par SMS</h3>${sms}<input id="ro" inputmode="numeric" maxlength="4" placeholder="Code à 4 chiffres" style="text-align:center;font-size:20px"><p class="note">Renvoi possible dans : <b id="cd"></b></p><div class="row" style="justify-content:center"><button class="pri" onclick="rs2()">Vérifier</button><button class="sec" id="rsend" onclick="rs1(true)" disabled>Renvoyer le code</button></div>`:`<h3>Nouveau code secret</h3><label for="n1">Nouveau code (4 chiffres)</label><input id="n1" type="password" inputmode="numeric" maxlength="4"><label for="n2">Confirmer le code</label><input id="n2" type="password" inputmode="numeric" maxlength="4"><button class="pri" style="margin-top:10px" onclick="rs3()">Enregistrer</button>`}<div><button class="sec" style="margin-top:8px" onclick="RS=null;render()">Annuler</button></div></div></div>`}
+function rs1(again){const k=key(again?RS.phone:$("#rp").value);if(!/^[67]\d{7}$/.test(k))return alert("Numéro gabonais invalide. Exemple : 074 00 00 00.");
+ const u=S.users.find(x=>x.role===RS.role&&key(x.phone)===k);if(!u)return alert("Aucun compte avec ce numéro.");
+ RS={...RS,step:2,phone:u.phone,uid:u.id,code:String(1000+Math.floor(Math.random()*9000)),until:Date.now()+60000};render()}
+function rs2(){if(Date.now()>RS.until+540000)return alert("Code expiré. Renvoyez le code.");if($("#ro").value.trim()!==RS.code)return alert("Code incorrect.");RS.step=3;render()}
+function rs3(){const a=$("#n1").value,b=$("#n2").value;if(!/^\d{4}$/.test(a))return alert("Le code doit avoir 4 chiffres.");if(a!==b)return alert("Les deux codes ne correspondent pas.");S.users.find(u=>u.id===RS.uid).pin=a;const r=RS.role;RS=null;AUTH="login";if(r==="client")CA=true;save();alert("Code modifié. Connectez-vous avec votre nouveau code.");role=r;render()}
+setInterval(()=>{const e=document.querySelector("#cd");if(!e||!RS||!RS.until)return;const s=Math.max(0,Math.ceil((RS.until-Date.now())/1000));e.textContent=s>0?s+" s":"maintenant";const b=document.querySelector("#rsend");if(b)b.disabled=s>0},1000);
+function brandView(){const b=S.brand;return `<div class="card"><h2>Branding et visuels</h2><label>Logo (image)</label><input type="file" accept="image/*" onchange="thumb(this.files[0],u=>{S.brand.logo=u;save();render()})"><button class="sec" style="margin-top:6px" onclick="S.brand.logo='';save();render()">Remettre le logo d’origine</button><div class="row"><div class="grow"><label>Vert vif</label><input type="color" id="c1" value="${b.c1}"></div><div class="grow"><label>Vert sombre</label><input type="color" id="c2" value="${b.c2}"></div><div class="grow"><label>Anthracite</label><input type="color" id="c3" value="${b.c3}"></div></div><label>Titre de la bannière</label><input id="bt" value="${esc(b.title)}"><label>Texte de présentation</label><textarea id="bs" rows="2">${esc(b.sub)}</textarea><label>Bannière promotionnelle (vide = masquée)</label><input id="bp" value="${esc(b.promo)}"><div class="row" style="margin-top:10px"><button class="pri" onclick="saveBrand()">Enregistrer</button><button class="sec" onclick="resetBrand()">Couleurs d’origine</button></div></div>`}
+function saveBrand(){Object.assign(S.brand,{c1:$("#c1").value,c2:$("#c2").value,c3:$("#c3").value,title:$("#bt").value,sub:$("#bs").value,promo:$("#bp").value});save();render()}
+function resetBrand(){Object.assign(S.brand,{c1:"#16A34A",c2:"#166534",c3:"#1F2937"});save();render()}
+function vAdmin(){const T=(k,l)=>`<button class="${AT===k?"pri":"sec"}" onclick="AT='${k}';render()">${l}</button>`;return `<div class="row" style="margin-bottom:12px">${T("dash","Tableau de bord")}${T("brand","Branding et visuels")}${T("cat","Catalogue")}</div>`+(AT==="brand"?brandView():AT==="cat"?pCatalog():dash())}
+// ---- CARTE RÉELLE (Leaflet + OpenStreetMap). Positions des zones approximatives : à ajuster ici.
+const GPS={ph:[0.3925,9.4560],z:[[0.3905,9.4560],[0.2900,9.5030],[0.5200,9.3800],[0.4500,9.6200],[0.3830,9.7640]]};
+let LM=null,MAP=null,MH=null,LG=null,SIG="";const ROUTES={};
+const hav=(a,b)=>{const r=x=>x*Math.PI/180,h=Math.sin(r(b[0]-a[0])/2)**2+Math.cos(r(a[0]))*Math.cos(r(b[0]))*Math.sin(r(b[1]-a[1])/2)**2;return 12742*Math.asin(Math.sqrt(h))};
+const dest=o=>{const z=GPS.z[o.zone],k=(parseInt(o.id.slice(2))%5)-2;return[z[0]+k*.0015,z[1]-k*.0012]};
+function route(o){const k=o.id+"|"+o.zone;if(ROUTES[k])return ROUTES[k];const a=GPS.ph,b=dest(o),km=hav(a,b)*1.3;
+ ROUTES[k]={pts:[a,b],dur:km/35*3600,km,real:false};
+ if(LM)fetch("https://router.project-osrm.org/route/v1/driving/"+a[1]+","+a[0]+";"+b[1]+","+b[0]+"?overview=full&geometries=geojson").then(r=>r.json()).then(j=>{const x=j.routes&&j.routes[0];if(x){ROUTES[k]={pts:x.geometry.coordinates.map(c=>[c[1],c[0]]),dur:x.duration,km:x.distance/1000,real:true};render()}}).catch(()=>{});
+ return ROUTES[k]}
+function posAt(pts,p){const d=[0];for(let i=1;i<pts.length;i++)d.push(d[i-1]+hav(pts[i-1],pts[i]));const t=d[d.length-1]*p;for(let i=1;i<pts.length;i++)if(t<=d[i]){const u=(t-d[i-1])/((d[i]-d[i-1])||1);return[pts[i-1][0]+(pts[i][0]-pts[i-1][0])*u,pts[i-1][1]+(pts[i][1]-pts[i-1][1])*u]}return pts[pts.length-1]}
+const etaMin=o=>gpsFresh(o.id)?Math.max(1,Math.ceil(hav([GPSLIVE[o.id].lat,GPSLIVE[o.id].lng],dest(o))*1.3/30*60)):Math.max(1,Math.ceil((1-o.prog)*route(o).dur/60));
+function mapSvg(o){return `<div class="mapslot" data-k="track" data-id="${o.id}">${mapSvgOld(o)}</div>`}
+function mapJobs(list,t){return `<div class="mapslot" data-k="jobs" data-ids="${list.map(o=>o.id).join(",")}">${mapJobsOld(list,t)}</div>`}
+function loadMap(){if(LM!==null||!document.head)return;LM=false;const l=document.createElement("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css";
+ l.onload=()=>{const c=document.createElement("script");c.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js";c.onload=initMap;document.head.appendChild(c)};document.head.appendChild(l)}
+function initMap(){MH=document.createElement("div");MH.style.cssText="height:320px;border-radius:10px";document.body.appendChild(MH);
+ MAP=L.map(MH).setView(GPS.ph,11);LG=L.layerGroup().addTo(MAP);let ok=0,bad=0;
+ const t=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OpenStreetMap"}).addTo(MAP);
+ t.on("tileload",()=>ok++);t.on("tileerror",()=>{if(++bad>6&&!ok){LM=false;MH.hidden=true;render()}});LM=true;render()}
+function attachMap(){const slot=document.querySelector('.mapslot[data-k="track"]')||document.querySelector(".mapslot");
+ if(slot&&LM===null)loadMap();
+ if(!slot||!LM||!MAP){if(MH)MH.hidden=true;return}
+ const k=slot.dataset.k,ids=k==="track"?[slot.dataset.id]:(slot.dataset.ids||"").split(",").filter(Boolean);
+ slot.innerHTML="";slot.appendChild(MH);MH.hidden=false;MAP.invalidateSize();LG.clearLayers();
+ const ic=e=>L.divIcon({html:`<div style="font-size:24px;filter:drop-shadow(0 1px 2px #0007)">${e}</div>`,className:"",iconSize:[28,28],iconAnchor:[14,14]});
+ const pts=[GPS.ph];L.marker(GPS.ph,{icon:ic("🏥")}).bindTooltip("Pharmacie").addTo(LG);
+ ids.forEach(id=>{const o=S.orders.find(x=>x.id===id);if(!o)return;const b=dest(o),r=route(o);pts.push(b);
+  L.marker(b,{icon:ic("🏠")}).bindTooltip(o.id+" : "+Z[o.zone][0]).addTo(LG);
+  if(k==="track"||o.status==="delivering")L.polyline(r.pts,{color:"#16A34A",weight:4,opacity:.75,dashArray:r.real?null:"6 8"}).addTo(LG);
+  if(o.status==="delivering"||o.status==="done"){const g=GPSLIVE[o.id],c=gpsFresh(o.id)?[g.lat,g.lng]:posAt(r.pts,o.prog);L.marker(c,{icon:ic("🛵")}).addTo(LG);if(k==="track")pts.push(c)}});
+ const sig=k+ids.join(",");if(sig!==SIG){SIG=sig;MAP.fitBounds(pts,{padding:[30,30],maxZoom:15})}}
+// ---- PARTAGE ENTRE APPAREILS + GPS EN DIRECT (actifs quand le serveur est connecté)
+const API=(window.PHARMALIV_API||"").replace(/\/$/,""),GPSLIVE={};let PT=null;
+const gpsFresh=id=>!!(GPSLIVE[id]&&Date.now()-GPSLIVE[id].t<30000);
+function push(){clearTimeout(PT);PT=setTimeout(async()=>{const{me,...data}=S;try{const r=await fetch(API+"/api/etat",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({base:S._v||0,data})});const j=await r.json();if(r.status===409){DIRTY=false;adopt(j.data,j.v)}else if(r.ok){S._v=j.v;DIRTY=false;try{localStorage.setItem("pl2",JSON.stringify(S))}catch(e){}}}catch(e){}},250)}
+function adopt(d,v){const me=S.me||{};S=d;S.me=me;S._v=v;S.users=S.users||[];S.brand=S.brand||seed().brand;S.wd=S.wd||[];S.tx=S.tx||[];S.notifs=S.notifs||[];try{localStorage.setItem("pl2",JSON.stringify(S))}catch(e){}render()}
+async function pull(){if(!SRV||DIRTY)return;try{const r=await fetch(API+"/api/etat?since="+(S._v||0));const j=await r.json();if(!j.same&&j.data&&j.v!==S._v)adopt(j.data,j.v);
+ for(const o of S.orders.filter(x=>x.status==="delivering")){const p=await(await fetch(API+"/api/position/"+encodeURIComponent(o.id))).json();if(p&&p.lat&&role!=="livreur"){GPSLIVE[o.id]=p;render()}}}catch(e){}}
+async function initSync(){try{const r=await fetch(API+"/api/etat?since=-1"),j=await r.json();if(j.data)adopt(j.data,j.v);else{S._v=0;DIRTY=true;push()}}catch(e){}setInterval(pull,3000)}
+function startGPS(id,quiet){if(!navigator.geolocation)return quiet?0:alert("Ce téléphone ne permet pas la géolocalisation.");stopGPS();let last=0;
+ GW=navigator.geolocation.watchPosition(p=>{const t=Date.now();if(t-last<4000)return;last=t;const g={lat:p.coords.latitude,lng:p.coords.longitude,t};GPSLIVE[id]=g;if(SRV)fetch(API+"/api/position",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id,lat:g.lat,lng:g.lng})}).catch(()=>{});render()},()=>{if(!quiet)alert("Position refusée : activez la localisation du téléphone.")},{enableHighAccuracy:true,maximumAge:2000})}
+function stopGPS(){if(GW!==null&&navigator.geolocation)navigator.geolocation.clearWatch(GW);GW=null}
+const PAYTEL={airtel:"074 XX XX XX",moov:"066 XX XX XX"};
+function p2pCard(o){return `<div class="card" style="border-color:var(--g)"><h3>Transfert direct : dernière étape</h3><p>Effectuez le transfert de <b>${f(o.total)}</b> au <b>${PAYTEL.airtel}</b> (Airtel) ou au <b>${PAYTEL.moov}</b> (Moov) avec le motif <b style="color:var(--gd)">${o.id}</b>.</p><label for="tx">Votre numéro émetteur ou l’ID de transaction</label><input id="tx" placeholder="074 00 00 00 ou ID reçu par SMS"><button class="pri" style="width:100%;margin-top:10px" onclick="p2pDone('${o.id}')">J’ai effectué le transfert</button></div>`}
+function p2pDone(id){const o=S.orders.find(x=>x.id===id),t=$("#tx").value.trim();if(!t)return alert("Indiquez votre numéro émetteur ou l’ID de transaction.");o.txRef=t;o.status="verif";notif("pharma",id+" : transfert à vérifier ("+t+")");notif("client",id+" • en attente de vérification SMS");save();render()}
+function okTr(id){const o=S.orders.find(x=>x.id===id);o.op+=" (transfert)";markPaid(o,o.txRef||"TRANSFERT")}
+function verifCard(){const l=S.orders.filter(o=>o.status==="verif");return l.length?`<div class="card"><h2>Transferts à vérifier</h2>${l.map(o=>`<div class="row" style="margin-bottom:6px"><b>${o.id}</b><span class="grow note">${f(o.total)} : ${esc(o.txRef)}</span><button class="pri" onclick="okTr('${o.id}')">Valider la réception du transfert</button></div>`).join("")}</div>`:""}
+const key=t=>String(t).replace(/[\s.-]/g,"").replace(/^\+?241/,"").replace(/^0/,"");
+const cu=()=>S.users.find(u=>u.id===(S.me||{}).client)||null;
+function authView(r){const t={client:"Client",pharma:"Pharmacie",livreur:"Livreur",admin:"Administrateur"}[r],reg=AUTH==="reg";
+ return `<div class="card" style="max-width:420px;margin:0 auto"><div style="text-align:center">${mk(56)}<h2>${reg?"Créer mon compte":"Connexion"} ${t}</h2></div>
+ <div class="row"><button class="${reg?"sec":"pri"}" onclick="AUTH='login';render()">Connexion</button>${r==="admin"?"":`<button class="${reg?"pri":"sec"}" onclick="AUTH='reg';render()">Inscription</button>`}</div>
+ ${reg?`<label for="an">${r==="pharma"?"Nom de la pharmacie":"Nom complet"}</label><input id="an" value="${esc($("#an")?.value||"")}">`:""}
+ <label for="ap">Téléphone</label><input id="ap" inputmode="tel" placeholder="074 00 00 00" value="${esc($("#ap")?.value||"")}">
+ <label for="aq">Code PIN (4 chiffres)</label><input id="aq" type="password" inputmode="numeric" maxlength="4">${reg&&r!=="client"?`<label for="am">Numéro Mobile Money de réception et de retrait</label><input id="am" inputmode="tel" placeholder="074 00 00 00"><label for="ao">Opérateur</label><select id="ao"><option>Airtel Money</option><option>Moov Money</option></select>`:""}${reg?"":`<p style="margin:10px 0 0"><a href="#" onclick="RS={step:1,role:'${r}'};render();return false">Code ou mot de passe oublié ?</a></p>`}
+ ${reg&&r==="client"?`<label for="aa">Adresse habituelle (facultatif)</label><input id="aa"><label for="az">Zone</label><select id="az">${Z.map((z,i)=>`<option value="${i}">${z[0]}</option>`).join("")}</select>`:""}
+ <button class="pri" style="width:100%;margin-top:12px" onclick="auth('${r}')">${reg?"Créer mon compte":"Me connecter"}</button>
+ ${r==="client"?'<p class="note">Vous pouvez aussi commander sans compte.</p>':`<p class="note">Compte de démonstration : 077 00 00 0${{pharma:1,livreur:2,admin:3}[r]}, PIN 1234.</p><button class="sec" onclick="demoLogin('${r}')">Utiliser le compte de démo</button>`}
+ <p class="note">Démonstration : les comptes restent sur cet appareil. En production, le serveur les protège.</p></div>`}
+function auth(r){const reg=AUTH==="reg",k=key($("#ap").value),pin=$("#aq").value;
+ if(!/^[67]\d{7}$/.test(k))return alert("Numéro gabonais invalide. Exemple : 074 00 00 00.");
+ if(!/^\d{4}$/.test(pin))return alert("Le code PIN doit avoir 4 chiffres.");
+ let u=S.users.find(x=>x.role===r&&key(x.phone)===k);
+ if(reg){const nm=$("#an").value.trim();if(!nm)return alert("Indiquez votre nom.");if(u)return alert("Ce numéro a déjà un compte. Connectez-vous.");
+  let mo="",mop="";if(r!=="client"){mo=$("#am").value.trim();if(!/^[67]\d{7}$/.test(key(mo)))return alert("Le numéro Mobile Money est obligatoire (ex. 074 00 00 00).");mop=$("#ao").value}
+  u={id:"u"+Date.now(),role:r,name:nm,phone:$("#ap").value.trim(),pin,wallet:0,momo:mo,momoOp:mop};
+  if(r==="client"){u.adr=$("#aa").value.trim();u.zone=+$("#az").value}
+  S.users.push(u)}
+ else if(!u||u.pin!==pin)return alert("Numéro ou code PIN incorrect.");
+ S.me=S.me||{};S.me[r]=u.id;CA=false;save();render()}
+function demoLogin(r){S.me[r]=S.users.find(u=>u.role===r).id;save();render()}
+function logout(){delete S.me[role];CA=false;save();render()}
+function quick(){return `<div class="card"><b>Bonjour ${esc(ME.name.split(" ")[0])} 👋</b><br><span class="note">Vos informations sont déjà remplies : choisissez vos produits et payez.</span></div>`}
+function history(){const l=S.orders.filter(o=>o.uid===ME.id).slice(0,5);return l.length?`<div class="card"><h2>Mes commandes</h2>${l.map(o=>`<div class="row" style="margin-bottom:6px"><b>${o.id}</b><span class="grow note">${o.items.map(i=>i.q+" × "+esc(i.name)).join(", ")}</span><button class="sec" onclick="reorder(${S.orders.indexOf(o)})">Recommander</button></div>`).join("")}</div>`:""}
+function reorder(i){const o=S.orders[i];cart={};o.items.forEach(x=>{const p=S.products.find(y=>y.name===x.name&&y.stock);if(p)cart[p.id]=x.q});insured=!!o.insured;scrollTo(0,0);render()}
+function quickReg(){const o=S.orders.find(x=>x.id===cur),pin=$("#gp").value;if(!/^\d{4}$/.test(pin))return alert("Le code PIN doit avoir 4 chiffres.");
+ if(S.users.some(u=>u.role==="client"&&key(u.phone)===key(o.phone)))return alert("Ce numéro a déjà un compte. Connectez-vous.");
+ const u={id:"u"+Date.now(),role:"client",name:o.name,phone:o.phone,pin,adr:o.adr,zone:o.zone,op:o.op};S.users.push(u);S.me.client=u.id;o.uid=u.id;save();render()}
+function thumb(f,cb){if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,700/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.6))};im.src=r.result};r.readAsDataURL(f)}
+const ART={"💊":c=>`<rect x="14" y="34" width="72" height="38" rx="5" fill="#fff" stroke="${c}" stroke-width="3"/><rect x="14" y="34" width="72" height="13" rx="5" fill="${c}"/><circle cx="34" cy="60" r="7" fill="${c}" opacity=".3"/><rect x="46" y="55" width="30" height="4" rx="2" fill="${c}" opacity=".5"/><rect x="46" y="62" width="22" height="4" rx="2" fill="${c}" opacity=".3"/>`,
+"🧪":c=>`<rect x="40" y="12" width="20" height="12" rx="3" fill="${c}"/><rect x="30" y="24" width="40" height="54" rx="9" fill="#fff" stroke="${c}" stroke-width="3"/><rect x="30" y="44" width="40" height="22" fill="${c}" opacity=".25"/><rect x="36" y="49" width="28" height="12" rx="2" fill="${c}"/>`,
+"💧":c=>`<path d="M50 12C50 12 28 40 28 58a22 22 0 0 0 44 0C72 40 50 12 50 12Z" fill="${c}" opacity=".85"/><path d="M40 60a10 10 0 0 0 10 10" stroke="#fff" stroke-width="3" fill="none"/>`,
+"🧴":c=>`<path d="M34 16h32l-4 10H38z" fill="${c}"/><rect x="34" y="26" width="32" height="54" rx="6" fill="#fff" stroke="${c}" stroke-width="3"/><rect x="34" y="50" width="32" height="14" fill="${c}" opacity=".3"/>`,
+"🍊":c=>`<rect x="30" y="14" width="40" height="12" rx="3" fill="${c}"/><rect x="26" y="26" width="48" height="56" rx="8" fill="#fff" stroke="${c}" stroke-width="3"/><circle cx="50" cy="56" r="13" fill="${c}"/><text x="50" y="62" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">C</text>`,
+"🌡️":c=>`<rect x="44" y="10" width="12" height="54" rx="6" fill="#fff" stroke="${c}" stroke-width="3"/><circle cx="50" cy="72" r="12" fill="${c}"/><rect x="48" y="32" width="4" height="36" fill="${c}"/>`,
+"😷":c=>`<rect x="14" y="26" width="72" height="50" rx="6" fill="#fff" stroke="${c}" stroke-width="3"/><path d="M26 42h48v16q-24 12-48 0z" fill="${c}" opacity=".35"/><path d="M26 42h48" stroke="${c}" stroke-width="3"/>`};
+const COL=["#16A34A","#2563EB","#EA580C","#9333EA","#0891B2","#DB2777","#CA8A04"];
+function pc(p){if(p.pic.startsWith("data:"))return `<img class="art" src="${p.pic}" alt="${esc(p.name)}" style="object-fit:cover">`;const c=COL[p.id%7];return `<svg class="art" viewBox="0 0 100 90" role="img" aria-label="${esc(p.name)}" style="background:${c}1A">${(ART[p.pic]||ART["💊"])(c)}</svg>`}
+function ussdOld(op,ph,amt,ok){const m=/moov/i.test(op),w=m?"moov":"airtel",d=document.createElement("div");d.className="ov";
+ d.innerHTML=`<div class="modal"><span class="badge" style="background:${m?"#0057B8":"#E4002B"}">CinetPay • ${esc(op)}</span><div class="spin"></div><h3>Demande envoyée au ${esc(ph)}</h3><p>Veuillez valider le paiement de <b>${f(amt)}</b> sur votre téléphone.</p><button class="pri" id="uok">Simuler validation CinetPay (Webhook Success)</button> <button class="sec" id="uno">Annuler</button><pre class="note" id="ulog" style="text-align:left;white-space:pre-wrap"></pre></div>`;
+ document.body.appendChild(d);d.querySelector("#uno").onclick=()=>{d.remove();render()};
+ d.querySelector("#uok").onclick=()=>{d.querySelector("#ulog").textContent="POST /webhooks/cinetpay (via "+w+")"+"\n{ \"cpm_result\": \"00\", \"amount\": "+amt+" }";d.querySelector(".spin").outerHTML='<div class="ok">✅</div>';setTimeout(()=>{d.remove();ok()},1100)}}
+function zoom(u){const d=document.createElement("div");d.className="ov";let z=1;d.innerHTML=`<div style="text-align:center;width:100%"><div class="row" style="justify-content:center;margin-bottom:8px"><button class="pri" id="zi">Zoom +</button><button class="sec" id="zo">Zoom −</button><button class="sec" id="zx">Fermer</button></div><div style="overflow:auto;max-height:80vh"><img src="${u}" alt="" style="width:100%;background:#fff;border-radius:8px"></div></div>`;document.body.appendChild(d);
+ const im=d.querySelector("img"),s=()=>{im.style.width=z*100+"%"};d.querySelector("#zi").onclick=()=>{z=Math.min(4,z+.5);s()};d.querySelector("#zo").onclick=()=>{z=Math.max(1,z-.5);s()};d.querySelector("#zx").onclick=()=>d.remove()}
+function mapJobsOld(list,t){return `<svg class="map" viewBox="0 0 620 220" role="img" aria-label="${t}"><path d="M0 200Q150 170 260 195T620 185" stroke="#93C5FD" stroke-width="12" fill="none"/><circle cx="60" cy="130" r="9" fill="#166534"/><text x="30" y="156" font-size="11" fill="currentColor">Pharmacie</text>${list.map(o=>{const x=200+o.zone*85,y=40+(o.zone%2)*70+(parseInt(o.id.slice(2))%3)*18;return `<line x1="60" y1="130" x2="${x}" y2="${y}" stroke="#16A34A" stroke-dasharray="5 5" opacity=".5"/><circle cx="${x}" cy="${y}" r="12" fill="#16A34A"><animate attributeName="r" values="10;14;10" dur="1.6s" repeatCount="indefinite"/></circle><text x="${x-14}" y="${y-18}" font-size="12" font-weight="700" fill="currentColor">${o.id}</text>`}).join("")}</svg>`}
+
+function editP(id){const p=S.products.find(x=>x.id===id);editId=id;pend=null;tab="cat";AT="cat";render();$("#pn").value=p.name;$("#pc").value=p.cat;$("#pp").value=p.price;$("#pt").value=p.tm;$("#pe").value=p.pic.startsWith("data:")?"":p.pic;scrollTo(0,0)}
+async function srvPay(finish,d){
+ const fail=m=>{$("#app").innerHTML=`<div class="card" style="text-align:center">${mk(72)}<h2>Paiement non effectué</h2><p>${esc(m)}</p><button class="pri" onclick="render()">Retour à la commande</button></div>`};
+ try{
+  let r=await fetch(API+"/api/paiements",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({operateur:/moov/i.test(d.op)?"moov":"airtel",telephone:d.ph,produits:d.prods,fraisZone:d.fee,assurance:insured})});
+  let p=await r.json();
+  if(!r.ok)return fail(p.erreur||"Le serveur a refusé la demande.");
+  if(p.urlPaiement)$("#app").innerHTML=`<div class="card" style="text-align:center">${mk(72)}<h2>Finalisez sur CinetPay</h2><p>Choisissez Airtel Money ou Moov Money sur la page sécurisée.</p><a class="pri" style="display:inline-block;text-decoration:none;padding:10px 16px;border-radius:8px;color:#fff" href="${esc(p.urlPaiement)}" target="_blank" rel="noopener">Ouvrir la page de paiement</a></div>`;
+  for(let i=0;i<100&&p.statut==="EN_ATTENTE";i++){await new Promise(s=>setTimeout(s,3000));r=await fetch(API+"/api/paiements/"+p.id);p=await r.json()}
+  if(p.statut==="REUSSI")finish(p);else fail(p.erreur||(p.statut==="ECHEC"?"Le paiement a échoué ou a été refusé.":"Pas de confirmation reçue. Réessayez."))
+ }catch(e){fail("Impossible de joindre le serveur. Vérifiez qu’il est lancé.")}
+}
+function ocrHtml(){return `<div class="ocr"><b>Données extraites (exemple simulé)</b><br>Assuré : ${esc(ocr.name)}<br>N° d’assuré : ${esc(ocr.num)}<br>Date de prescription : ${esc(ocr.date)}<br>Lisibilité de l’ordonnance : ${ocr.q} %<br>Taux de prise en charge : ${ocr.taux||80} %<br>Frais de dossier : 200 FCFA<br>Pièce reçues : ${ocr.docs.join(", ")}</div>`}
+function runOcr(inp,k){const file=inp.files[0];if(!file)return;ocr=ocr||{docs:[]};ocr.imgs=ocr.imgs||{};thumb(file,u=>{ocr.imgs[k]=u});
+ $("#ocrbox").innerHTML='<div class="ocr">Analyse du document en cours…<div class="scan"><img src="'+URL.createObjectURL(file)+'" alt=""><i></i></div></div>';
+ setTimeout(()=>{const d=new Date(Date.now()-2*864e5).toLocaleDateString("fr-FR");
+ Object.assign(ocr,{name:"Mba Nguema Clarisse",num:"CNAMGS-0048213",date:d,q:92,taux:80});
+ ocr.docs=[...new Set([...ocr.docs,{ord:"ordonnance",card:"carte d’assuré",id:"pièce d’identité"}[k]])];render()},1700)}
+function pay(){
+ const nm=$("#nm").value.trim(),ph=$("#ph").value.trim(),adr=$("#adr").value.trim();
+ if(!nm||!ph||!adr)return alert("Renseignez votre nom, votre téléphone et votre adresse.");
+ if(!/^(0[67]\d{7}|(\+?241)?[67]\d{7})$/.test(ph.replace(/[\s.-]/g,"")))return alert("Numéro gabonais invalide. Exemple : 074 00 00 00 (Airtel) ou 066 00 00 00 (Moov).");
+ if(insured&&(!ocr||ocr.docs.length<3))return alert("Ajoutez l’ordonnance, la carte d’assuré et la pièce d’identité.");
+ const zi=+$("#zone").value,op=$("#op").value,items=Object.entries(cart).filter(e=>e[1]).map(([id,q])=>{const p=S.products.find(x=>x.id==id);return{name:p.name,q,u:insured?p.tm:p.price}});
+ $("#app").innerHTML=`<div class="card" style="text-align:center">${mk(72)}<h2>Demande de paiement envoyée</h2><p>Une demande ${esc(op)} arrive sur le ${esc(ph)}. Validez avec votre code secret.</p><p class="note">${SRV?(SRV.mode==="live"?"Confirmez sur votre téléphone. La page se met à jour toute seule.":"Mode simulation du serveur : confirmation automatique en 3 secondes."):"Utilisez le bouton « Simuler validation CinetPay (Webhook Success) »."}</p></div>`;
+ const fee=Z[zi][1],prods=items.reduce((s,i)=>s+i.q*i.u,0),ins=insured?200:0,finish=(sv,st)=>{const code=sv?sv.code:nextCode();if(sv){S.day=today();S.n=Math.max(S.n,+code.slice(2))}
+ const o={uid:(cu()||{}).id||null,id:code,name:nm,phone:ph,adr,zone:zi,fee,prods,ins,total:prods+fee+ins,items,insured,ocr:insured?{...ocr}:null,op,otp:String(1000+Math.floor(Math.random()*9000)),status:st||"paid",pm:st?"p2p":"auto",prog:0,split:sv&&sv.livreur?{liv:sv.livreur,pl:sv.pharmaliv,pharm:sv.pharmacie}:{liv:Math.round(fee*.8),pl:Math.round(fee*.2)+ins,pharm:prods}};
+ S.orders.unshift(o);if(!st)S.tx.unshift({t:new Date().toLocaleString("fr-FR"),id:code,op,total:o.total,...o.split,ref:sv&&sv.refOperateur?sv.refOperateur:"TX"+Date.now().toString().slice(-7)});
+ if(st==="await")notif("client",code+" • en attente de votre transfert");else{notif("pharma","Nouvelle commande "+code+" : à valider");notif("client","Commande envoyée à la pharmacie • "+code)}
+ wmOrder(o);const c0=cu();if(c0)Object.assign(c0,{phone:ph,adr,zone:zi,op});cur=code;cart={};ocr=null;insured=false;save();render()};
+ const go2=st=>SRV?fetch(API+"/api/code",{method:"POST"}).then(r=>r.json()).then(j=>finish({code:j.code},st)).catch(()=>finish(null,st)):finish(null,st);
+ go2(PM==="p2p"?"await":"new")
+
+}
+function vTrack(o){
+ const st={new:0,push:0,await:0,verif:0,paid:1,prep:2,ready:2,delivering:3,done:4}[o.status];
+ return `<div class="card"><div class="row">${mk(48)}<div class="grow"><div class="note">Votre commande</div><div class="code">${o.id}</div></div><div><div class="note">Code OTP à donner au livreur</div><div class="code" style="font-size:36px">${o.otp}</div></div></div>
+ <div class="steps">${["Payé","En préparation","En livraison","Livré"].map((s,i)=>`<div class="${i<st?"d":""}">${s}</div>`).join("")}</div>
+ ${o.status==="delivering"?`<p><b>Arrivée estimée : ${etaMin(o)} min (${route(o).km.toFixed(1)} km)</b></p>`:""}${mapSvg(o)}
+ ${o.status==="new"?`<div class="card"><span class="badge b">En cours de validation</span><p>La pharmacie vérifie vos produits. Une demande de paiement arrivera sur votre téléphone.</p></div>`:o.status==="push"?pushCard(o):o.status==="await"?p2pCard(o):o.status==="verif"?`<div class="card"><span class="badge r">En attente de vérification SMS</span><p>Nous vérifions votre transfert (${esc(o.txRef)}). Vous serez prévenu dès sa réception.</p></div>`:""}<p class="note">Total ${["paid","prep","ready","delivering","done"].includes(o.status)?"payé":"à régler"} : ${f(o.total)} via ${esc(o.op)}.</p>${toasts("client")}
+ <button class="sec" onclick="cur=null;render()">Nouvelle commande</button></div>${cu()?"":`<div class="card"><b>Gagnez du temps à la prochaine commande</b><br><span class="note">Créez votre compte en un geste avec les informations de cette commande.</span><label for="gp">Code PIN (4 chiffres)</label><input id="gp" type="password" inputmode="numeric" maxlength="4"><button class="pri" style="margin-top:8px" onclick="quickReg()">Créer mon compte</button></div>`}`;
+}
+function mapSvgOld(o){const cx=300+o.zone*55,cy=60+o.zone*30,px=60,py=170,x=px+(cx-px)*o.prog,y=py+(cy-py)*o.prog;
+ return `<svg class="map" viewBox="0 0 620 260" role="img" aria-label="Carte du Grand Libreville"><path d="M0 240 Q150 200 260 230 T620 215" stroke="#93C5FD" stroke-width="14" fill="none"/><text x="14" y="252" font-size="11" fill="#64748B">Estuaire du Gabon</text>
+ <line x1="${px}" y1="${py}" x2="${cx}" y2="${cy}" stroke="#16A34A" stroke-width="3" stroke-dasharray="6 5"/>
+ <image href="${LOGO}" x="${px-11}" y="${py-14}" width="22" height="28"/><text x="${px-20}" y="${py+26}" font-size="12" fill="currentColor">Pharmacie</text>
+ <circle cx="${cx}" cy="${cy}" r="9" fill="#1F2937"/><text x="${cx-20}" y="${cy-14}" font-size="12" fill="currentColor">Domicile</text>
+ ${o.status==="delivering"||o.status==="done"?`<circle cx="${x}" cy="${y}" r="11" fill="#16A34A" stroke="#fff" stroke-width="3"><animate attributeName="r" values="11;15;11" dur="1.2s" repeatCount="indefinite"/></circle><text x="${x-8}" y="${y+5}" font-size="14">🛵</text>`:""}</svg>`}
+function bindClient(){}
+/* ---------- PHARMACIE ---------- */
+function vPharma(){
+ const n=S.orders.filter(o=>["new","paid","verif"].includes(o.status)).length;if(n>lastSeen)beep();lastSeen=n;
+ const body=tab==="orders"?`${walletCard()}<div class="card"><h2>Commandes</h2>${toasts("pharma")}</div>${S.orders.filter(o=>o.status!=="done"&&o.status!=="await").map(pOrder).join("")||'<div class="card note">Aucune commande en cours. Passez une commande dans le portail Client.</div>'}`:pCatalog();
+ return `<div class="banner">${mk(56)}<div><b>Espace officine : ${esc(ME.name)}</b><br>Commandes et stocks en direct.</div></div><div class="row" style="margin-bottom:12px"><button class="${tab==="orders"?"pri":"sec"}" onclick="tab='orders';render()">Commandes (${n} nouvelles)</button><button class="${tab==="cat"?"pri":"sec"}" onclick="tab='cat';render()">Catalogue et stocks</button></div>${body}`}
+function pOrder(o){return `<div class="card ${o.status==="paid"?"flash":""}"><div class="row"><span class="stat">${o.id}</span><span class="badge ${["new","paid","verif"].includes(o.status)?"r":["prep","delivering","push"].includes(o.status)?"b":""}">${{new:"Nouvelle commande",push:"Push USSD envoyé",paid:"Payée : à préparer",verif:"En attente de vérification SMS",prep:"En cours de préparation",ready:"Validée : prête pour retrait",delivering:"En livraison"}[o.status]}</span></div>
+ <p>${esc(o.name)} · ${esc(Z[o.zone][0])}<br>${o.items.map(i=>`${i.q} × ${esc(i.name)}`).join(", ")}<br><b>${o.insured?"Ticket modérateur":"Produits"} : ${f(o.prods)}</b></p>
+ ${o.ocr?`<div class="ocr">Données OCR à vérifier : ${esc(o.ocr.name)} · ${esc(o.ocr.num)} · prescription du ${esc(o.ocr.date)} · lisibilité ${o.ocr.q} %<br>Documents : ${o.ocr.docs.join(", ")} (filigrane ${o.id} + horodatage)<br>N° d’assuré : <input id="ni${o.id.slice(1)}" value="${esc(o.ocr.num)}" style="width:170px"> <button class="sec" onclick="saveNum('${o.id}')">${o.ocr.numOk?"Validé ✓":"Valider"}</button>${Object.entries(o.ocr.imgs||{}).map(([k,u])=>`<details><summary>Voir : ${{ord:"ordonnance",card:"carte d’assuré",id:"pièce d’identité"}[k]}</summary><img src="${u}" alt="" style="max-width:100%;border-radius:8px;margin-top:6px;cursor:zoom-in" onclick="zoom(this.src)"></details>`).join("")}</div>`:""}
+ ${o.status==="new"?`<button class="pri" onclick="pushPay('${o.id}')">Valider les produits et envoyer le Push USSD</button>`:o.status==="push"?`<p class="note">Push USSD envoyé : en attente du code PIN du client.</p>`:""}
+ ${o.status==="verif"?`<p>Transfert annoncé : <b>${esc(o.txRef)}</b> pour ${f(o.total)}. Vérifiez le SMS reçu avec le motif ${o.id}.</p><button class="pri" onclick="okTr('${o.id}')">Valider la réception du transfert</button>`:""}
+ ${o.status==="paid"?`<button class="pri" onclick="setSt('${o.id}','prep')">Commencer la préparation</button>`:""}
+ ${o.status==="prep"?`<button class="pri" onclick="setSt('${o.id}','ready')">Valider et marquer Prête pour Retrait ${o.id}</button>`:""}
+ ${o.status==="ready"?`<div style="text-align:center">${mk(44)}<div class="note">Code à remettre au livreur</div><div class="code" style="font-size:72px">${o.id}</div></div>`:""}</div>`}
+function setSt(id,s){const o=S.orders.find(x=>x.id===id);o.status=s;
+ if(s==="prep")notif("client",id+" · votre commande est en préparation");
+ if(s==="ready"){notif("livreur",id+" prête pour retrait · "+Z[o.zone][0]);notif("client",id+" · prête, un livreur arrive")}
+ save();render()}
+function pCatalog(){return `<div class="card"><h2>Ajouter ou modifier un produit</h2><div class="row"><div class="grow"><label>Nom</label><input id="pn"></div><div class="grow"><label>Catégorie</label><select id="pc"><option>Médicaments</option><option>Parapharmacie</option></select></div><div class="grow"><label>Prix public</label><input id="pp" type="number"></div><div class="grow"><label>Ticket modérateur</label><input id="pt" type="number" value="0"></div><div class="grow"><label>Photo (image) ou emoji</label><input type="file" accept="image/*" onchange="thumb(this.files[0],u=>{pend=u})"><input id="pe" value="💊"></div></div><button class="pri" style="margin-top:10px" onclick="addP()">Enregistrer le produit</button></div>
+ <div class="card"><h2>Stocks en temps réel</h2><div class="scroll"><table><tr><th>Produit</th><th>Prix</th><th>Ticket</th><th>Statut</th><th></th></tr>${S.products.map(p=>`<tr><td>${pc(p)} ${esc(p.name)}</td><td>${f(p.price)}</td><td>${f(p.tm)}</td><td><button class="sec" onclick="tgl(${p.id})">${p.stock?"En stock":"Rupture"}</button></td><td><button class="sec" onclick="editP(${p.id})">Modifier</button> <button class="sec" onclick="delP(${p.id})">Supprimer</button></td></tr>`).join("")}</table></div></div>
+ <div class="card"><h2>Import et export CSV</h2><p class="note">Colonnes : nom;catégorie;prix;ticket;emoji;stock (1 ou 0). Collez un fichier Excel exporté en CSV puis importez.</p><input type="file" accept=".csv,text/csv" onchange="this.files[0]&&this.files[0].text().then(t=>{$('#csv').value=t})"><textarea id="csv" rows="5"></textarea><div class="row" style="margin-top:8px"><button class="sec" onclick="expCsv()">Exporter le catalogue</button><button class="pri" onclick="impCsv()">Importer ce CSV</button></div></div>`}
+function addP(){const n=$("#pn").value.trim();if(!n||!$("#pp").value)return alert("Indiquez au moins le nom et le prix.");const d={name:n,cat:$("#pc").value,price:+$("#pp").value,tm:+$("#pt").value||0,pic:pend||$("#pe").value||(editId&&S.products.find(x=>x.id===editId).pic)||"💊"};if(editId){Object.assign(S.products.find(x=>x.id===editId),d);editId=null}else S.products.push({id:Date.now(),...d,stock:true});pend=null;save();render()}
+function tgl(id){const p=S.products.find(x=>x.id===id);p.stock=!p.stock;save();render()}
+function delP(id){S.products=S.products.filter(p=>p.id!==id);save();render()}
+function expCsv(){$("#csv").value=S.products.map(p=>[p.name,p.cat,p.price,p.tm,p.pic,p.stock?1:0].join(";")).join("\n")}
+function impCsv(){const rows=$("#csv").value.split("\n").map(r=>r.split(";")).filter(r=>r.length>=3&&r[0]);rows.forEach((r,i)=>S.products.push({id:Date.now()+i,name:r[0],cat:r[1]||"Parapharmacie",price:+r[2]||0,tm:+r[3]||0,pic:r[4]||"💊",stock:r[5]!=="0"}));save();render()}
+/* ---------- LIVREUR ---------- */
+function vLivreur(){
+ const ready=S.orders.filter(o=>o.status==="ready").sort((a,b)=>a.zone-b.zone),run=S.orders.filter(o=>o.status==="delivering");
+ return `<div class="banner">${mk(56)}<div><b>Espace livreur : ${esc(ME.name)}</b><br>Courses prêtes, gains et retraits. Vous ne transportez que le sac de médicaments scellé : aucun document papier à récupérer.</div></div><div class="card"><h2>Portefeuille</h2><div class="row"><span class="stat">${f(ME.wallet||0)}</span><button class="pri" ${ME.wallet?"":"disabled"} onclick="payout()">Retirer vers mon Mobile Money (${esc(ME.momoOp||"")} ${esc(ME.momo||"")})</button></div><p class="note">Port du badge et du masque obligatoire à l’officine.</p>${toasts("livreur")}</div>
+ <div class="card"><h2>Courses prêtes, les plus proches d’abord</h2>${mapJobs(ready,"Courses disponibles")}${ready.map(o=>`<div class="card"><b>${o.id}</b> · ${esc(Z[o.zone][0])}<br>Gain net : <b>${f(o.split.liv)}</b> (80 % de ${f(o.fee)})<br><label>Code ${o.id} affiché à l’officine</label><div class="row"><input id="pk${o.id.slice(1)}" placeholder="#P001"><button class="pri" onclick="pickup('${o.id}')">Récupérer le colis</button></div></div>`).join("")||'<p class="note">Aucune course prête pour le moment.</p>'}</div>
+ ${run.map(o=>`<div class="card"><h2>En cours : ${o.id}</h2>${mapSvg(o)}<button class="sec" onclick="startGPS('${o.id}')">${gpsFresh(o.id)?"Position partagée en direct ✓":"Partager ma position en direct"}</button><p>${esc(o.name)} · ${esc(o.adr)} · ${esc(o.phone)}</p><label>Code OTP donné par le client</label><div class="row"><input id="otp${o.id.slice(1)}" inputmode="numeric"><button class="pri" onclick="deliver('${o.id}')">Valider la livraison</button></div></div>`).join("")}`}
+function pickup(id){const o=S.orders.find(x=>x.id===id);if($("#pk"+id.slice(1)).value.trim().toUpperCase()!==id)return alert("Code incorrect. Demandez le code affiché à l’officine.");o.status="delivering";notif("client",id+" · le livreur est en route");startGPS(id,true);save();render()}
+function deliver(id){const o=S.orders.find(x=>x.id===id);if($("#otp"+id.slice(1)).value.trim()!==o.otp)return alert("Code OTP incorrect.");o.status="done";o.prog=1;stopGPS();ME.wallet=(ME.wallet||0)+o.split.liv;notif("client",id+" · livrée, merci !");notif("livreur","Livraison "+id+" validée : +"+f(o.split.liv));save();render()}
+function withdraw(){const op=prompt("Retirer "+f(ME.wallet||0)+" vers : Airtel Money ou Moov Money ?","Airtel Money");if(!op)return;const tel=prompt("Numéro "+op+" à créditer :");if(!tel)return;S.wd.unshift({who:ME.name,id:Date.now(),t:new Date().toLocaleString("fr-FR"),op,tel,amt:ME.wallet,st:"demande"});ME.wallet=0;notif("livreur","Demande de retrait envoyée à PHARMALIV");save();render()}
+async function payWd(id){
+ const w=S.wd.find(x=>x.id===id);if(!w)return;
+ if(SRV){
+  if(!ADM)ADM=prompt("Mot de passe admin PHARMALIV (ADMIN_KEY du serveur) :")||"";
+  if(!ADM)return;
+  try{
+   const r=await fetch(API+"/api/retraits",{method:"POST",headers:{"Content-Type":"application/json","x-cle-admin":ADM},body:JSON.stringify({operateur:/moov/i.test(w.op)?"moov":"airtel",telephone:w.tel,montant:w.amt,motif:"retrait livreur"})});
+   const j=await r.json();
+   if(r.status===401)ADM="";
+   if(!r.ok)throw new Error(j.erreur||"Refusé");
+   w.ref=j.refOperateur
+  }catch(e){return alert("Retrait non envoyé : "+e.message)}
+ }
+ w.st="envoye";notif("livreur","Retrait de "+f(w.amt)+" envoyé vers "+w.op);save();render()
+}
+setInterval(()=>{let ch=0;S.orders.forEach(o=>{if(o.status==="delivering"&&o.prog<.95&&!gpsFresh(o.id)&&(!SRV||role==="livreur")){o.prog=Math.min(.95,o.prog+.08);ch=1}});if(ch){save();if(role==="client"||role==="livreur")render()}},1500);
+/* ---------- ADMIN ---------- */
+function dash(){
+ const done=S.orders.filter(o=>o.status==="done"),ca=S.orders.filter(o=>!['await','verif','new','push'].includes(o.status)).reduce((s,o)=>s+o.total,0),com=S.orders.filter(o=>!['await','verif','new','push'].includes(o.status)).reduce((s,o)=>s+o.split.pl,0);
+ return `<div class="banner">${mk(56)}<div><b>Siège PHARMALIV</b><br>Suivi des commandes, des paiements et des partenaires.</div></div>${walletCard()}<div class="grid"><div class="card"><div class="note">Commandes du jour</div><div class="stat">${S.orders.length}</div><div class="note">Dernier code : ${S.n?"#P"+String(S.n).padStart(3,"0"):"aucun"}</div></div><div class="card"><div class="note">Chiffre d’affaires</div><div class="stat">${f(ca)}</div></div><div class="card"><div class="note">Commissions PHARMALIV</div><div class="stat">${f(com)}</div></div><div class="card"><div class="note">Livrées</div><div class="stat">${done.length}</div></div><div class="card"><div class="note">Livraisons en cours</div><div class="stat">${S.orders.filter(o=>["ready","delivering"].includes(o.status)).length}</div></div></div>
+ <div class="card"><h2>Journal des transactions</h2><div class="scroll"><table><tr><th>Heure</th><th>Code</th><th>Opérateur</th><th>Total</th><th>Livreur</th><th>PHARMALIV</th><th>Pharmacie</th></tr>${S.tx.map(t=>`<tr><td>${esc(t.t)}</td><td>${t.id}</td><td>${esc(t.op)}</td><td>${f(t.total)}</td><td>${f(t.liv)}</td><td>${f(t.pl)}</td><td>${f(t.pharm)}</td></tr>`).join("")||'<tr><td colspan="7" class="note">Aucune transaction.</td></tr>'}</table></div>
+ <button class="sec" style="margin-top:10px" onclick="$('#exp').value=['heure;code;operateur;total;livreur;pharmaliv;pharmacie;ref'].concat(S.tx.map(t=>[t.t,t.id,t.op,t.total,t.liv,t.pl,t.pharm,t.ref].join(';'))).join('\\n')">Exporter pour la comptabilité</button><textarea id="exp" rows="4" style="margin-top:8px"></textarea></div>
+ ${verifCard()}<div class="card"><h2>Carte globale</h2>${mapJobs(S.orders.filter(o=>["ready","delivering"].includes(o.status)),"Carte globale")}</div><div class="card"><h2>Retraits (historique)</h2><div class="scroll"><table><tr><th>Date</th><th>Opérateur</th><th>Numéro</th><th>Montant</th><th>État</th></tr>${S.wd.map(w=>`<tr><td>${esc(w.t)} ${esc(w.who||"")}</td><td>${esc(w.op)}</td><td>${esc(w.tel||"")}</td><td>${f(w.amt)}</td><td>${w.st==="demande"?`<button class="pri" onclick="payWd(${w.id})">Valider et envoyer</button>`:'<span class="badge">Envoyé</span>'}</td></tr>`).join("")||'<tr><td colspan="5" class="note">Aucune demande de retrait.</td></tr>'}</table></div></div><div class="card"><h2>Partenaires</h2><div class="scroll"><table><tr><th>Nom</th><th>Type</th><th>Contrôle</th></tr>${S.users.filter(u=>u.role!=="client").map(u=>`<tr><td>${esc(u.name)}</td><td>${u.role==="pharma"?"Pharmacie":"Livreur"}</td><td><span class="badge">Inscrit</span></td></tr>`).join("")}</table></div><p class="note">Clients inscrits : ${S.users.filter(u=>u.role==="client").length}. Retraits envoyés : ${S.wd.filter(w=>w.st!=="demande").length}</p></div>`}
+render();
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(()=>{});
+fetch(API+"/api/sante").then(r=>r.json()).then(j=>{if(j&&j.ok){SRV=j;render();initSync()}}).catch(()=>{});
+</script></body></html>
