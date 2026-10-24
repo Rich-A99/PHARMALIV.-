@@ -105,6 +105,135 @@ function toasts(r){return S.notifs.filter(n=>n.to===r).slice(0,3).map(n=>`<div c
 function beep(){try{const c=new AudioContext(),o=c.createOscillator();o.frequency.value=880;o.connect(c.destination);o.start();setTimeout(()=>{o.stop();c.close()},350)}catch(e){}}
 
 function render(){
+ const navEl = $("#nav");
+ if(navEl) {
+   navEl.innerHTML = ROLES.map(r => `<button class="${r[0] === role ? "on" : ""}" onclick="go('${r[0]}')">${r[1]}</button>`).join("");
+ }
+ ME=S.me&&S.me[role]?S.users.find(u=>u.id===S.me[role])||null:null;
+ const B=S.brand,rs=document.documentElement.style;rs.setProperty("--g",B.c1);rs.setProperty("--gd",B.c2);if(!(typeof matchMedia==="function"&&matchMedia("(prefers-color-scheme: dark)").matches))rs.setProperty("--ink",B.c3);
+ const markImg = document.querySelector("header .mark");
+ if(markImg) markImg.src = B.logo || LOGO;
+ if(MH)document.body.appendChild(MH);
+ const appEl = $("#app");
+ if(appEl) {
+   appEl.innerHTML = RS ? resetView() : role === "client" ? (CA && !ME ? authView("client") : vClient()) : ME ? (role === "admin" ? vAdmin() : role === "pharma" ? vPharma() : vLivreur()) : authView(role);
+ }
+ attachMap();
+ if(role==="client"&&cur&&!SRV&&!RS){const o=S.orders.find(x=>x.id===cur);if(o&&o.status==="push"&&!o.shown){o.shown=true;setTimeout(()=>payUssd(o.id),400)}}
+ const acctEl = $("#acct");
+ if(acctEl) {
+   acctEl.innerHTML = ME ? `<button class="sec" onclick="logout()">👤 ${esc(ME.name.split(" ")[0])} • Quitter</button>` : role === "client" ? `<button class="pri" onclick="CA=true;AUTH='reg';render()">Mon compte</button>` : "";
+ }
+ const sb=$("#srv");
+ if(sb) {
+   sb.className="badge "+(SRV?(SRV.mode==="live"?"":"r"):"m");
+   sb.textContent=SRV?"Serveur connecté":"CinetPay Demo";
+ }
+ const footEl = $("#foot");
+ if(footEl) {
+   footEl.innerHTML = mk(36)+'<div><b>PHARMA</b><span style="font-weight:300">LIV</span><br>Plateforme de livraison de médicaments dans le Grand Libreville</div>';
+ }
+ if(role==="client"&&cur)bindClient();
+}
+
+/* ---------- CLIENT ---------- */
+function cartTotal(){return Object.entries(cart).reduce((s,[id,q])=>{const p=S.products.find(x=>x.id==id);return s+p.price*q},0)}
+
+function vClient(){
+ const mine=cur&&S.orders.find(o=>o.id===cur);
+ if(mine)return vTrack(mine);
+ const zi=+($("#zone")?.value||(ME&&ME.zone)||0),fee=Z[zi][1],prods=cartTotal();
+ return `<div class="banner">${mk(64)}<div><b>${esc(S.brand.title)}</b><br>${esc(S.brand.sub)}</div></div>${S.brand.promo?`<div class="card" style="border-color:var(--g);background:#16A34A14"><b>${esc(S.brand.promo)}</b></div>`:""}${ME?quick():""}
+ 
+ <div class="card">
+  <h2>1. Type de commande (Assurance vs Sans assurance)</h2>
+  <div class="row">
+    <button class="${insuranceMode==="assurance"?"pri":"sec"}" onclick="insuranceMode='assurance';render()">Avec assurance (CNAMGS / Mutuelle)</button>
+    <button class="${insuranceMode!=="assurance"?"pri":"sec"}" onclick="insuranceMode='none';render()">Sans assurance (Cash)</button>
+  </div>
+  
+  ${insuranceMode==="assurance"?`
+    <div class="note" style="margin-top:10px">Veuillez téléverser votre ordonnance et votre carte d'assuré pour calcul du ticket modérateur.</div>
+    <div class="row" style="margin-top:10px">
+      <div class="grow"><label>Photo de l’ordonnance</label><div class="drop">Ajouter ordonnance<input type="file" accept="image/*" onchange="runOcr(this,'ord')"></div></div>
+      <div class="grow"><label>Carte CNAMGS / Assuré</label><div class="drop">Ajouter carte assurance<input type="file" accept="image/*" onchange="runOcr(this,'card')"></div></div>
+    </div>
+    <div id="ocrbox">${ocr?ocrHtml():'<div class="note">Documents requis pour l\'assurance.</div>'}</div>
+  `:`
+    <div style="margin-top:12px;border-top:1px solid var(--line);padding-top:10px">
+      <label><b>Avez-vous une ordonnance pour vos médicaments (sans assurance) ?</b></label>
+      <div class="row" style="margin-top:6px">
+        <button class="${hasPrescription?"pri":"sec"}" onclick="hasPrescription=true;render()">Oui (J'ai une ordonnance)</button>
+        <button class="${!hasPrescription?"pri":"sec"}" onclick="hasPrescription=false;render()">Non (Achat libre / Parapharmacie)</button>
+      </div>
+      ${hasPrescription?`
+        <div style="margin-top:10px">
+          <label>Photo de l'ordonnance (Cash)</label>
+          <div class="drop">Glisser ou toucher pour ajouter l'ordonnance<input type="file" accept="image/*" onchange="runOcr(this,'ord')"></div>
+        </div>
+        <div id="ocrbox">${ocr?ocrHtml():'<div class="note">Téléversez votre ordonnance pour la préparation.</div>'}</div>
+      `:''}
+    </div>
+  `}
+ </div>
+
+ <div class="card">
+  <h2>2. Sélection des produits</h2>
+  <div class="grid">${S.products.filter(p=>hasPrescription || insuranceMode==="assurance" || !p.rx).map(p=>`<div class="prod ${p.stock?"":"out"}">
+    <span class="badge ${p.stock?"":"x"}" style="position:absolute;top:8px;right:8px">${p.stock?"Dispo":"Rupture"}</span>
+    ${p.rx?'<span class="badge b" style="position:absolute;top:8px;left:8px">Ordonnance requis</span>':''}
+    <div class="ph">${pc(p)}</div><b>${esc(p.name)}</b>
+    <div class="note">${esc(p.cat)}</div>
+    <div>${f(p.price)}</div>
+    ${p.stock?`<div class="row" style="margin-top:6px"><button class="sec" onclick="qty(${p.id},-1)" aria-label="Retirer">−</button><b>${cart[p.id]||0}</b><button class="sec" onclick="qty(${p.id},1)" aria-label="Ajouter">+</button></div>`:'<span class="badge r">Rupture de stock</span>'}
+  </div>`).join("")}</div>
+ </div>
+
+ <div class="card">
+  <h2>3. Livraison & Paiement CinetPay</h2>
+  <div class="row">
+    <div class="grow"><label>Nom complet</label><input id="nm" value="${esc(ocr?.name||$("#nm")?.value||(ME&&ME.name)||"")}"></div>
+    <div class="grow"><label>Téléphone Mobile Money</label><input id="ph" inputmode="tel" placeholder="074 00 00 00" value="${esc($("#ph")?.value||(ME&&ME.phone)||"")}"></div>
+  </div>
+  <label>Zone de livraison (Grand Libreville)</label>
+  <select id="zone" onchange="render()">${Z.map((z,i)=>`<option value="${i}" ${i===zi?"selected":""}>Zone ${i+1} · ${z[0]} · ${f(z[1])}</option>`).join("")}</select>
+  <label>Adresse / Quartier de livraison</label><input id="adr" placeholder="Ex: Nzeng-Ayong, derrière la pharmacie" value="${esc($("#adr")?.value||(ME&&ME.adr)||"")}">
+  <label>Opérateur Mobile Money</label>
+  <select id="op">${["Airtel Money Gabon","Moov Money Gabon"].map(o=>`<option ${o===($("#op")?.value||(ME&&ME.op)||"Airtel Money Gabon")?"selected":""}>${o}</option>`).join("")}</select>
+  <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+  <div class="row">
+    <span class="grow">Produits : ${f(prods)}<br>Frais de livraison : ${f(fee)}</span>
+    <span class="stat">${f(prods+fee)}</span>
+  </div>
+  <button class="pri" style="width:100%;margin-top:12px" ${prods || hasPrescription || insuranceMode==="assurance"?"":"disabled"} onclick="pay()">Payer par Mobile Money (CinetPay)</button>
+ </div>${ME?history():""}`;
+}
+
+function qty(id,d){cart[id]=Math.max(0,(cart[id]||0)+d);render()}
+function settle(o){const a=S.users.find(u=>u.role==="admin"),p=S.users.find(u=>u.role==="pharma");if(a)a.wallet=(a.wallet||0)+o.split.pl;if(p)p.wallet=(p.wallet||0)+o.split.pharm}
+function markPaid(o,ref){o.status="paid";S.tx.unshift({t:new Date().toLocaleString("fr-FR"),id:o.id,op:o.op,total:o.total,...o.split,ref:ref||"CP"+Date.now().toString().slice(-7)});settle(o);notif("pharma",o.id+" : paiement CinetPay confirmé");notif("client","Paiement confirmé via Mobile Money • "+o.id);save();render()}
+
+function payUssd(id){const o=S.orders.find(x=>x.id===id);if(o&&o.status==="push")ussd(o.op,o.phone,o.total,()=>markPaid(o),()=>{o.status="new";o.shown=false;notif("pharma",id+" : paiement annulé");save();render()})}
+function pushCard(o){return `<div class="card" style="border-color:var(--g)"><span class="badge r">Paiement Mobile Money</span><p>Demande de ${f(o.total)} envoyée au ${esc(o.phone)} (${esc(o.op)}).</p>${SRV?'<p class="note">Validez le paiement sur votre téléphone.</p>':`<button class="pri" onclick="payUssd('${o.id}')">Simuler la validation Mobile Money</button>`}</div>`}
+
+function ussd(op,ph,amt,ok,no){
+  const m=/moov/i.test(op);
+  const d=document.createElement("div");d.className="ov";d.id="ussd";
+  d.innerHTML=`<div class="modal"><span class="badge" style="background:${m?"#0057B8":"#E4002B"}">CinetPay • ${esc(op)}</span><div class="spin"></div><h3>Guichet CinetPay</h3><p>PHARMALIV demande <b>${f(amt)}</b>. Saisissez votre code PIN (numéro ${esc(ph)}).</p><input id="upin" type="password" inputmode="numeric" maxlength="4" placeholder="PIN à 4 chiffres" style="text-align:center;font-size:20px"><div class="row" style="justify-content:center;margin-top:10px"><button class="pri" id="uok">Confirmer</button><button class="sec" id="uno">Annuler</button></div><pre class="note" id="ulog" styleorEach(r=>{const u=S.users.find(x=>x.role===r);if(u)S.me[r]=u.id})}
+
+function save(){try{localStorage.setItem("pl2",JSON.stringify(S))}catch(e){}DIRTY=true;if(SRV)push()}
+function reset(){if(confirm("Effacer toutes les données ?")){S=seed();cart={};ocr=null;save();go("client")}}
+
+let role="client",cart={},ocr=null,insuranceMode="none",hasPrescription=false,lastSeen=0,tab="orders",cur=null,SRV=null,ADM="",editId=null,pend=null,ME=null,AUTH="login",CA=false,RS=null,AT="dash",DIRTY=false,GW=null;
+const $=s=>document.querySelector(s),f=n=>n.toLocaleString("fr-FR")+" FCFA",esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function notif(to,msg){S.notifs.unshift({to,msg,t:new Date().toLocaleTimeString("fr-FR")});S.notifs=S.notifs.slice(0,30)}
+function nextCode(){if(S.day!==today()){S.day=today();S.n=0}S.n++;return"#P"+String(S.n).padStart(3,"0")}
+function go(r){role=r;CA=false;render()}
+const LOGO=document.querySelector(".mark").src,mk=h=>`<img class="mark" src="${S.brand.logo||LOGO}" alt="" style="height:${h}px">`;
+function toasts(r){return S.notifs.filter(n=>n.to===r).slice(0,3).map(n=>`<div class="toast">${esc(n.t)} · ${esc(n.msg)}</div>`).join("")}
+function beep(){try{const c=new AudioContext(),o=c.createOscillator();o.frequency.value=880;o.connect(c.destination);o.start();setTimeout(()=>{o.stop();c.close()},350)}catch(e){}}
+
+function render(){
  $("#nav").innerHTML=ROLES.map(r=>`<button class="${r[0]===role?"on":""}" onclick="go('${r[0] ?? ''}')">${r[1]}</button>`).join("");
  ME=S.me&&S.me[role]?S.users.find(u=>u.id===S.me[role])||null:null;
  const B=S.brand,rs=document.documentElement.style;rs.setProperty("--g",B.c1);rs.setProperty("--gd",B.c2);if(!(typeof matchMedia==="function"&&matchMedia("(prefers-color-scheme: dark)").matches))rs.setProperty("--ink",B.c3);document.querySelector("header .mark").src=B.logo||LOGO;
