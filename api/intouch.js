@@ -29,3 +29,12 @@ exports.handle=async(req,res,url,b={})=>{
     try{
       if(live())await callInTouch({service_id:E["INTOUCH_SERVICE_"+t.operateur.toUpperCase()],recipient_phone_number:tel(t.telephone),amount:total,partner_transaction_id:id,call_back_url:(E.PUBLIC_URL||"")+"/api/intouch/callback"});
       else setTimeout(()=>succeed(t,"SIM-"+id),3000); // simulation : confirmation après 3 s
+    }catch(e){t.statut="ECHEC";return send(res,502,{erreur:e.message}),true}
+    return send(res,200,{id,statut:t.statut,total,repartition:rep}),true}
+  const m=url.pathname.match(/^\/api\/paiements\/(IT\d+)$/);
+  if(req.method==="GET"&&m){const t=TX.get(m[1]);return t?send(res,200,{id:t.id,statut:t.statut,refOperateur:t.refOperateur,versement:t.versement}):send(res,404,{erreur:"Inconnu"}),true}
+  if(req.method==="POST"&&url.pathname==="/api/intouch/callback"){ // notification InTouch
+    const id=b.partner_transaction_id,t=TX.get(id);
+    if(t){/^(SUCCESS|SUCCESSFUL|00)$/i.test(String(b.status||b.statut||b.code))?await succeed(t,b.gu_transaction_id||b.reference):(t.statut="ECHEC")}
+    return send(res,200,{ok:true}),true}
+  return false};
